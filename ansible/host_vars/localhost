@@ -1,0 +1,8 @@
+---
+ansible_python_interpreter: /usr/bin/python
+
+hostname: localhost
+domain: localdomain
+
+cap_deployment: localhost
+project_owner: hardyoyo

@@ -67,6 +67,13 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
 
+    #-----------------------------
+    # HD Settings
+    #-----------------------------
+    # if we have the disksize plugin, request a specific disk size
+    if Vagrant.has_plugin?('vagrant-disksize')
+        config.disksize.size = '50GB'
+    end
 
     #------------------------
     # Provisioning Scripts
@@ -97,14 +104,24 @@ Vagrant.configure("2") do |config|
         config.vm.provision :shell, :name => "apt-spy2, running default apt-spy-2-bootstrap", :path => "apt-spy-2-bootstrap.sh"
     end
 
-  # run ansible bootstrap
+    # run ansible bootstrap
     config.vm.provision :shell, :name => "running ansible-bootstrap", :path => "ansible-boostrap-ubuntu.sh"
 
+    # provision with ansible_local
+    config.vm.provision "ansible_local" do |ansible|
+      ansible.playbook          = "playbook.yml"
+      ansible.verbose           = true
+      ansible.limit             = "local" #Yeah, don't do prod just yet, OK? Thanks!
+      ansible.provisioning_path = "/vagrant/ansible"
+      ansible.inventory_path    = "/vagrant/ansible/inventory"
+    end
+
+    # housekeeping
     config.vm.hostname = "hyrax"
     config.vm.network :private_network, ip: "192.168.33.33"
 
     # Set the name of the VM. See: http://stackoverflow.com/a/17864388/100134
-  config.vm.define :hyrax do |hyrax|
-  end
+    config.vm.define :hyrax do |hyrax|
+    end
 
 end

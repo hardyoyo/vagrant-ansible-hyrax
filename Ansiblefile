@@ -4,7 +4,7 @@
 
 role "ksclarke.ansible-samvera",
       github: "ksclarke/ansible-samvera",
-      ref: "3de8d986fa307c8fb4d192ab49497a2a90b3c23a"
+      ref: "origin/test"
 
 # more roles can be added here, you can pull them from GitHub or from Ansible Galaxy
 # docs here: https://github.com/bcoe/librarian-ansible

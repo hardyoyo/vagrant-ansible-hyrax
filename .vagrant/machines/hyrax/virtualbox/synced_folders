@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/hpottinger/workspace/vagrant-ansible-hyrax","disabled":false,"__vagrantfile":true},"vagrant-notify":{"id":"vagrant-notify","guestpath":"/tmp/vagrant-notify","hostpath":"/tmp/vagrant-notify/07099d07d95b47e69ab5a3c6de8bc291","disabled":false,"__vagrantfile":true}}}
