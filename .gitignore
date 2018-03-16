@@ -6,3 +6,4 @@ tmp
 *.retry
 imagemagick_sources
 .vagrant
+.vagrant/*
