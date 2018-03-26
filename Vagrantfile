@@ -12,7 +12,14 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "ubuntu/xenial64"
+  #config.vm.box = "ubuntu/xenial64"
+
+  # use my Samvera-Basebox
+  config.vm.box = "hardyoyo/Samvera-Basebox"
+  config.vm.box_version = "0.0.2"
+
+  # use Kevin's samvera-base box
+#  config.vm.box = "ksclarke/samvera-base"
 
   #skip the inserting of a key, because it's problematic and not needed
   config.ssh.insert_key = false

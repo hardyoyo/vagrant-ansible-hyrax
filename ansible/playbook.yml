@@ -13,7 +13,7 @@
   user: ubuntu
   gather_facts: true
   vars:
-    project_name: 'meta4ax'
+    project_name: 'nurax'
     keys_to_add:
       - https://github.com/hardyoyo.keys
     db_user: 'hyrax'
@@ -28,15 +28,15 @@
     - { role: ruby, ruby_version: '2.4.2', ruby_sha_256: '93b9e75e00b262bc4def6b26b7ae8717efc252c47154abb7392e54357e6c8c9c' }
     - { role: fedora, fedora_version: '4.7.1' }
     - { role: solr, solr_version: '6.6.2' }
-    - { role: fits, fits_version: '0.8.4' }
+#    - { role: fits, fits_version: '0.8.4' }
     - { role: postgres, postgres_pass: 'G{BkCZ7^fsDg2su' }
     - { role: apache, passenger_ver: '5.1.11'}
     - { role: apache_with_mod_ssl }
     # Note: You will need to either copy your SSL certs by hand,
     # or create an ansible task to do it and reference it here.
     # - { role: dce_ssl }
-    - { role: imagemagick, imagemagick_ver: '7.0.7', gs_ver: '9.19', openjpg_ver: '2.1.0', libtiff_ver: '4.0.5', libpng_ver: '1.6.28' }
-    - { role: ffmpeg, ffmpeg_version: '3.4' }
+#    - { role: imagemagick, imagemagick_ver: '7.0.7', gs_ver: '9.19', openjpg_ver: '2.1.0', libtiff_ver: '4.0.5', libpng_ver: '1.6.28' }
+#    - { role: ffmpeg, ffmpeg_version: '3.4' }
     - { role: capistrano_setup }
     - { role: first_deploy }
 #    - { role: force_ssl }

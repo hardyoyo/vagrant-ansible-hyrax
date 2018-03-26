@@ -4,5 +4,7 @@ ansible_python_interpreter: /usr/bin/python
 hostname: localhost
 domain: localdomain
 
-cap_deployment: localhost
+cap_deployment: production
 project_owner: hardyoyo
+
+postgres_pass: demo_root_db_password
