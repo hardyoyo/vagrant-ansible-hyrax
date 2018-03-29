@@ -8,37 +8,60 @@
       - name: install python for ansible
         raw: sudo apt-get -y install python-simplejson
 
-- hosts: local
+- hosts: all
   name: configure server
   user: ubuntu
-  gather_facts: true
+  gather_facts: false
   vars:
-    project_name: 'nurax'
     keys_to_add:
       - https://github.com/hardyoyo.keys
-    db_user: 'hyrax'
-    db_pass: 'hyrax'
+    hostname: 'localhost'
+    domain: 'localdomain'
+    cap_deployment: 'localhost'
+    project_owner: 'hardyoyo'
+    project_name: 'nurax'
+    project_branch: 'test'
+    samvera_db_user: 'demo_db_user'
+    samvera_db_password: 'demo_db_password'
+    root_db_password: 'demo_root_db_password'
+    timezone: 'America/Los_Angeles'
+    project_version: 'test'
+
+  environment:
+    PROJECT_OWNER: "{{ project_owner }}"
+    PROJECT_NAME: "{{ project_name }}"
+    BRANCH: "{{ project_branch }}"
+
   roles:
-    - { role: packages }
-    - { role: set_timezone, timezone: America/Los_Angeles }
-    - { role: set_hostname }
-    - { role: sshd_config }
-    - { role: setup_logrotation }
-    - { role: clamav }
+###    - { role: packages }
+###    - { role: set_timezone, timezone: America/Los_Angeles }
+###    - { role: set_hostname }
+###    - { role: sshd_config }
+###    - { role: setup_logrotation }
+###    - { role: clamav }
+###    - { role: ansible-role-clamav }
     - { role: ruby, ruby_version: '2.4.2', ruby_sha_256: '93b9e75e00b262bc4def6b26b7ae8717efc252c47154abb7392e54357e6c8c9c' }
-    - { role: fedora, fedora_version: '4.7.1' }
-    - { role: solr, solr_version: '6.6.2' }
+###    - { role: fedora, fedora_version: '4.7.1' }
+###    - { role: solr, solr_version: '6.6.2' }
 #    - { role: fits, fits_version: '0.8.4' }
-    - { role: postgres, postgres_pass: 'G{BkCZ7^fsDg2su' }
-    - { role: apache, passenger_ver: '5.1.11'}
-    - { role: apache_with_mod_ssl }
+#    - { role: postgres, postgres_pass: 'G{BkCZ7^fsDg2su' }
+###    - { role: apache, passenger_ver: '5.1.11'}
+###    - { role: apache_with_mod_ssl }
     # Note: You will need to either copy your SSL certs by hand,
     # or create an ansible task to do it and reference it here.
     # - { role: dce_ssl }
 #    - { role: imagemagick, imagemagick_ver: '7.0.7', gs_ver: '9.19', openjpg_ver: '2.1.0', libtiff_ver: '4.0.5', libpng_ver: '1.6.28' }
 #    - { role: ffmpeg, ffmpeg_version: '3.4' }
-    - { role: capistrano_setup }
-    - { role: first_deploy }
+#    - { role: capistrano_setup }
+    - { role: my_first_deploy, project_name: 'nurax', project_owner: 'hardyoyo', cap_deployment: 'localhost', project_branch: 'test' }
 #    - { role: force_ssl }
+
+
+
+
+
+
+
+
     - { role: restart }
 #    - { role: shibboleth-sp }
