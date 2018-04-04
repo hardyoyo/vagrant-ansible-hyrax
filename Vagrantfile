@@ -24,6 +24,12 @@ Vagrant.configure("2") do |config|
   #skip the inserting of a key, because it's problematic and not needed
   config.ssh.insert_key = false
 
+    #------------------------
+    # Enable SSH Forwarding
+    #------------------------
+    # Turn on SSH forwarding (so that 'vagrant ssh' has access to your local SSH keys, and you can use your local SSH keys to access GitHub, etc.)
+    config.ssh.forward_agent = true
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
