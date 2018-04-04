@@ -46,4 +46,4 @@ This project leverages the work of my colleague [Kevin S. Clarke](https://github
 
 ## License
 
-[MIT](/hardyoyo/vagrant-ansible-hyrax/blob/master/LICENSE)
+[MIT](https://github.com/hardyoyo/vagrant-ansible-hyrax/blob/master/LICENSE)
