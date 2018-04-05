@@ -24,11 +24,35 @@ Vagrant.configure("2") do |config|
   #skip the inserting of a key, because it's problematic and not needed
   config.ssh.insert_key = false
 
+
+    # Turn off annoying console bells/beeps in Ubuntu (only if not already turned off in /etc/inputrc)
+    config.vm.provision :shell, :name => "disable console beep", :inline => "echo 'Turning off console beeps...' && grep '^set bell-style none' /etc/inputrc || echo 'set bell-style none' >> /etc/inputrc"
+
     #------------------------
     # Enable SSH Forwarding
     #------------------------
     # Turn on SSH forwarding (so that 'vagrant ssh' has access to your local SSH keys, and you can use your local SSH keys to access GitHub, etc.)
     config.ssh.forward_agent = true
+
+    # Prevent annoying "stdin: is not a tty" errors from displaying during 'vagrant up'
+    # See also https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
+    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
+    # Create a '/etc/sudoers.d/root_ssh_agent' file which ensures sudo keeps any SSH_AUTH_SOCK settings
+    # This allows sudo commands (like "sudo ssh git@github.com") to have access to local SSH keys (via SSH Forwarding)
+    # See: https://github.com/mitchellh/vagrant/issues/1303
+    config.vm.provision :shell do |shell|
+        shell.inline = "touch $1 && chmod 0440 $1 && echo $2 > $1"
+        shell.args = %q{/etc/sudoers.d/root_ssh_agent "Defaults    env_keep += \"SSH_AUTH_SOCK\""}
+        shell.name = "creating /etc/sudores.d/root_ssh_agent"
+    end
+
+    # Check if a test SSH connection to GitHub succeeds or fails (on every vagrant up)
+    # 
+    config.vm.provision :shell, :name => "root: testing SSH connection to GitHub on VM", :inline => "echo 'root: Testing SSH connection to GitHub on VM...' && ssh -T -q -oStrictHostKeyChecking=no git@github.com", run: "always"
+
+    # that was for root, do it again for vagrant
+    config.vm.provision :shell, :name => "vagrant: testing SSH connection to GitHub on VM", :inline => "echo 'vagrant: Testing SSH connection to GitHub on VM...' && sudo -u vagrant ssh -T -q -oStrictHostKeyChecking=no git@github.com", run: "always"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -128,6 +152,14 @@ Vagrant.configure("2") do |config|
       ansible.provisioning_path = "/vagrant/ansible"
       ansible.inventory_path    = "/vagrant/ansible/inventory"
     end
+
+
+    # Load any local customizations from the "local-bootstrap.sh" script (if it exists)
+    # Check out the "config/local-bootstrap.sh.example" for examples
+    if File.exists?("config/local-bootstrap.sh")
+        config.vm.provision :shell, :inline => "echo '   > > > running config/local_bootstrap.sh (as vagrant)' && sudo -i -u vagrant /vagrant/config/local-bootstrap.sh"
+    end
+
 
     # housekeeping
     config.vm.hostname = "hyrax"

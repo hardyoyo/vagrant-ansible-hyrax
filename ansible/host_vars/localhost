@@ -5,7 +5,7 @@ hostname: localhost
 domain: localdomain
 
 cap_deployment: localhost
-project_owner: hardyoyo
+project_owner: ksclarke
 project_name: nurax
 project_branch: test
 

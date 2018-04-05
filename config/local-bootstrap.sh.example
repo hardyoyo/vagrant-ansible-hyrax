@@ -1,0 +1,105 @@
+#!/bin/bash
+
+# local-bootstrap.sh.example is an example of a local bootstrap shell povisioner. If you copy this file to local-bootstrap.sh, and modify it to match your needs, it will be run whenever you run vagrant-up.
+
+# local-bootstrap.sh is a hacky little solution to customizing this Vagrant workspace. There are probably better alternatives.
+
+# function for calling apt-get
+function aptget {
+  # to prevent encoding problem
+  sudo DEBIAN_FRONTEND=noninteractive apt-get -y \
+    -o Dpkg::Options::="--force-confdef" \
+    -o Dpkg::Options::="--force-confold" \
+    $@
+}
+
+# add extra packages here
+aptget install ack-grep
+aptget install ctags
+aptget install ddate
+aptget install fortune
+aptget install vim
+aptget install vim-gnome
+aptget install tmux
+aptget install libnotify-bin
+aptget install notify-osd-icons
+aptget install humanity-icon-theme
+aptget install ansible
+aptget install beep
+aptget install libxml2-utils
+aptget install xsltproc
+aptget install stow
+
+# and just to be sure, let's just upgrade everything
+aptget upgrade
+
+# Git-smart is super helpful, especially for git newbies, and is worth installing just for smart-log
+echo "installing git-smart gem"
+sudo gem install git-smart
+
+# Travis-CI has a nice CLI script that is handy for validating a .travis.yml file before you commit it
+echo "installing travis gem"
+sudo gem install travis
+
+# notes is a nice little way to find TODO and FIXME notes, so you can work on them
+echo "installing notes gem"
+sudo gem install notes
+#git config --global alias.n '!git ls-files | xargs notes'
+
+# BASH history transplant (curse these lazy fingers)
+# if [ -f "/vagrant/config/dotfiles/bash_history" ]; then
+#     echo "transplanting BASH history file"
+#     cp /vagrant/config/dotfiles/bash_history /home/vagrant/.bash_history
+# fi
+
+# # BASH inputrc customization 
+ if [ -f "/vagrant/config/dotfiles/inputrc" ]; then
+     echo "setting up BASH inputrc file"
+     cp /vagrant/config/dotfiles/inputrc /home/vagrant/.inputrc
+ fi
+
+# BASH aliases customization
+if [ -f "/vagrant/config/dotfiles/bash_aliases" ]; then
+    echo "setting up .bash_aliases file"
+    cp /vagrant/config/dotfiles/bash_aliases /home/vagrant/.bash_aliases
+fi
+
+# Vim customization
+
+# first install exuberant-ctags (required by my vimrc file)
+aptget install exuberant-ctags
+
+# clone a dotfiles repository (please use your own, the below is just an example)
+#cd /home/vagrant && git clone git@github.com:hardyoyo/dotfiles.git dotfiles
+#cd /home/vagrant/dotfiles && git checkout hardyoyo-preferences
+#cd /home/vagrant/dotfiles && stow git
+#cd /home/vagrant/dotfiles && stow shell
+#cd /home/vagrant/dotfiles && stow tmux
+#cd /home/vagrant/dotfiles && stow vim
+#cd /home/vagrant/dotfiles && stow bin
+
+# set up Vundle
+git clone https://github.com/VundleVim/Vundle.vim.git /home/vagrant/.vim/bundle/Vundle.vim
+
+# install Vundle
+#cd /home/vagrant/.vim && git clone https://github.com/gmarik/Vundle.vim.git bundle/Vundle.vim
+
+# and let's make sure Vim is our default editor
+echo "export EDITOR=\"/usr/bin/vim --servername vim\"" >> /home/vagrant/.profile
+
+# and let's run Vundle Install disabled... this hangs up every time, skip it
+#vim +PluginInstall +qall -q /dev/null
+
+# and let's initialize ctags if the tags file doesn't already exist
+# if [ ! -f "/home/vagrant/dspace-src/tags" ]; then
+#     ctags -R /home/vagrant/dspace-src -f /home/vagrant/dspace-src/tags --exclude *target*
+# fi
+
+# MORE dotfiles
+
+# copy bin folder if it's around
+#if [ -d "/vagrant/config/dotfiles/bin" ]; then
+#   echo "copying bin folder and scripts..."
+#   cp -r /vagrant/config/dotfiles/bin /home/vagrant/bin
+#fi
+

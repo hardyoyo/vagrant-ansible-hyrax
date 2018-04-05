@@ -20,8 +20,6 @@
       - database.yml
       - secrets.yml
 
-
-
 - name: clone repo
   git:
       repo: https://github.com/{{ project_owner }}/{{ project_name }}.git
@@ -59,24 +57,7 @@
   become: true
   service: name=apache2 state=restarted
 
-- name: un-bork permissions on /var/www because, seriously?
-  become: true
-  file:
-    path: /var/www
-    owner: deploy
-    group: deploy
-    mode: 0775
-
-- name: make /var/www/project_name/shared/config becuase apparently we need it
-  become: true
-  file:
-    path: '/var/www/{{ project_name }}/shared/config'
-    state: directory
-    owner: deploy
-    group: deploy
-    mode: 0775
-
-- name: copy config files, why not?
+- name: copy config files to the correct deployment folder
   copy:
     src: '/home/{{ ansible_ssh_user }}/{{ project_name }}/config/{{ item }}'
     dest: '/opt/{{ project_name }}/shared/config/{{ item }}'
@@ -91,30 +72,6 @@
     - 'fedora.yml'
     - 'solr.yml'
   become: yes
-
-- name: copy config files to /var/www/project_name, why not?
-  copy:
-    src: '/home/{{ ansible_ssh_user }}/{{ project_name }}/config/{{ item }}'
-    dest: '/var/www/{{ project_name }}/shared/config/{{ item }}'
-    remote_src: yes
-    owner: deploy
-    group: deploy
-    mode: 0644
-  with_items:
-    - 'analytics.yml'
-    - 'blacklight.yml'
-    - 'browse_everything_providers.yml'
-    - 'database.yml'
-    - 'fedora.yml'
-    - 'solr.yml'
-  become: yes
-
-- name: also create shared config files in /var/www/project_name/shared/config
-  become: yes
-  template: src={{ item }}.j2 dest=/var/www/{{ project_name }}/shared/config/{{ item }} owner=deploy group=deploy backup=no
-  with_items:
-      - database.yml
-      - secrets.yml
 
 - name: deploy to production directories with capistrano
   shell: cap {{ cap_deployment }} deploy
