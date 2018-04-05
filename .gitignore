@@ -7,3 +7,5 @@ tmp
 imagemagick_sources
 .vagrant
 .vagrant/*
+config/local-bootstrap.sh
+^config/local-bootstrap.sh.example
