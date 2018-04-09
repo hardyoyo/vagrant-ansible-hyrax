@@ -169,4 +169,14 @@ Vagrant.configure("2") do |config|
     config.vm.define :hyrax do |hyrax|
     end
 
+    # if we're running with vagrant-notify, send a notification that we're done, in case we've wandered off
+    # https://github.com/fgrehm/vagrant-notify
+    # NOTE: Currently this plugin only works on Linux or OSX hosts
+    if Vagrant.has_plugin?('vagrant-notify')
+        config.vm.provision :shell, :inline => "notify-send --urgency=critical -t 20000 'Vagrant-Ansible-Hyrax is up! Get back to work! :-)'", run: "always"
+    end
+
+    # Message to display to user after 'vagrant up' completes
+    config.vm.post_up_message = "Setup of 'vagrant-ansible-hyrax' is now COMPLETE! Nurax should now be available at:\n\nhttp://127.0.0.1:8080/\n\nThe Samvera Solr instance is accessible via local port 8983.\nYou can SSH into the new VM via 'vagrant ssh'"
+
 end
