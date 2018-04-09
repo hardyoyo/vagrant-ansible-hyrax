@@ -6,6 +6,19 @@ Need more roles? Add them to the Ansiblefile. Call them in the playbook.
 
 This is totally a work in progress, use at your own risk.
 
+## Requirements
+
+* [Virtualization support must be enabled](http://www.howtogeek.com/213795/how-to-enable-intel-vt-x-in-your-computers-bios-or-uefi-firmware/), if you have a BIOS-based computer (aka a PC).
+* [Vagrant](http://vagrantup.com/) version 1.8.3 or above.
+* [VirtualBox](https://www.virtualbox.org/)
+* (Optional) A GitHub account with an associated SSH key. This is NOT required, but if you plan to do development with this project and/or create Pull Requests, it is recommended. If you have a local [SSH agent](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/) running (or [Pageant/PuTTY](http://www.putty.org/) on Windows, or the [OSX Keychain with a saved passphrase](https://apple.stackexchange.com/questions/48502/how-can-i-permanently-add-my-ssh-private-key-to-keychain-so-it-is-automatically)), Vagrant will attempt to automatically forward your local SSH key(s) to the VM, so that you will be able to immediately interact with GitHub via SSH on the VM. However, if you are *not* running a key agent, and your SSH key has a passphrase, Vagrant will *not* prompt you to enter a password, it will simply fail to run all the provisioning processes. We urge you to consider running a key agent with your SSH key, it will make your life so much more simple.
+ * *WARNING:* If you are using an SSH key, we highly recommend that you use an RSA key. The base OS we use, Ubuntu 16.04LTS, uses OpenSSH 7.0, which [*disallows* DSA keys by default](http://viryagroup.com/what-we-do/our-blog-posts/hosting-and-linux-server-managment-blog/ssh-keys-failing-in-ubuntu-16-04-xenial-with-permission-denied-publickey). You can of course work around this, but OpenSSH made this choice for a reason, you will probably be happier in the long run if you switch to an RSA key.
+
+## Do I need to install Ansible?
+
+No, this project uses the [Ansible Local Provisioner](https://www.vagrantup.com/docs/provisioning/ansible_local.html) for Vagrant. That means Ansible is installed and run from the guest VM. You only need the above-mentioned requirements.
+
+
 ## How to use
 
 Standard Vagrant protocol: clone this repository, cd to the root of it, and run
@@ -23,7 +36,7 @@ simple guide here: [but I don't want to build anything](https://github.com/kscla
 
 Vagrant has a robust community of plugin developers, and some of the plugins are quite nice. [Installing a Vagrant plugin](https://www.vagrantup.com/docs/plugins/usage.html) is simple.
 
-The following Vagrant plugin is *required*, if you use the default [ubuntu/xenial](https://app.vagrantup.com/ubuntu/boxes/xenial64) base box (in other words, if you don't change the default, you'll *need* this plugin).
+The following Vagrant plugin is *required*, if you use the [ubuntu/xenial](https://app.vagrantup.com/ubuntu/boxes/xenial64) base box. Kevin Clarke's base box is reasonably-sized, so this plugin won't do anything for it. But, if you get to tinkering and want to use a standard base box so you can test ALL of the DCE Ansible roles, you'll want to use the Vagrant-Disksize plugin.
 
 * [Vagrant-Disksize](https://github.com/sprotheroe/vagrant-disksize) - may not be required if you use another base box, but it's handy if you ever do end up using the ubuntu/xenial base box (it's too tiny to be usable for much of anything).
 
