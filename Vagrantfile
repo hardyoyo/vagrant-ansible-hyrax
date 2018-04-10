@@ -17,6 +17,7 @@ Vagrant.configure("2") do |config|
   # use my Samvera-Basebox
 #  config.vm.box = "hardyoyo/Samvera-Basebox"
   config.vm.box = "ksclarke/samvera-base"
+  config.vm.box_version = "0.0.3-1522791790"
 
   # use Kevin's samvera-base box
 #  config.vm.box = "ksclarke/samvera-base"
